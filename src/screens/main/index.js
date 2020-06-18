@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 function HomeScreen() {
@@ -22,14 +21,13 @@ function SettingsScreen() {
 
 //Tab.Navigator
 const Tab = createBottomTabNavigator();
-const defaultNavigationOptions = (route) => ({
+const defaultNavigationOptions = ({ route }) => ({
 	tabBarIcon: ({focused, color, size}) => {
-		console.log('route', route)
 		let iconName;
-		if (route.name === 'Home') {
+		if(route.name === 'Home') {
 			iconName = focused ? 'pinwheel' : 'pinwheel-outline';
-		} else if (route.name === 'Settings') {
-			iconName = focused ? 'pinwheel-outline' : 'pinwheel';
+		}else {
+			iconName = focused ? 'cards' : 'cards-outline';
 		}
 
 		return <MCIcons name={iconName} size={size} color={color} />;
@@ -39,20 +37,19 @@ const defaultNavigationOptions = (route) => ({
 class Main extends React.Component {
 
 	render() {
-		const { route } = this.props;
+		const { } = this.props;
 		return(
-			<NavigationContainer independent={true}>
-				<Tab.Navigator
-					screenOptions={defaultNavigationOptions(route)}
-					tabBarOptions={{
-						activeTintColor: 'tomato',
-						inactiveTintColor: 'gray',
-					}}
-				>
-					<Tab.Screen name="Home" component={HomeScreen} />
-					<Tab.Screen name="Settings" component={SettingsScreen} />
-				</Tab.Navigator>
-			</NavigationContainer>
+			<Tab.Navigator
+				// screenOptions={defaultNavigationOptions()} 这样不行为啥
+				screenOptions={defaultNavigationOptions}
+				tabBarOptions={{
+					activeTintColor: 'tomato',
+					inactiveTintColor: 'gray',
+				}}
+			>
+				<Tab.Screen name="Home" component={HomeScreen} />
+				<Tab.Screen name="Settings" component={SettingsScreen} />
+			</Tab.Navigator>
 		)
 	}
 }

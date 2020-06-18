@@ -10,7 +10,7 @@ import {View, TextInput, UIManager, Platform, BackHandler} from 'react-native';
 
 import routerConfig from './configs/router'; //路由配置
 import modelOption from './models/modelOption'; //数据管理
-// import LoadingPopup from './ui/components/LoadingPopup'; //全局加载
+
 
 import './utils/storage'; //本地储存
 import toolFn from './utils/toolFunction';  //工具函数
@@ -69,7 +69,7 @@ class App extends React.PureComponent {
     }
 
     prepareApp() {
-        
+        // 
         registerUncaughtExceptionHandlers();        
 
         // Set some default props to commonly used UI components.
@@ -94,22 +94,23 @@ class App extends React.PureComponent {
                     <Provider store={store}>                      
                         <NavigationContainer>
                             <Stack.Navigator                                
-                                initialRouteName="Home"
-                                screenOptions={defaultNavigationOptions}
-                                //该语句隐藏Navigator自带标题栏
-                                headerMode="none" 
+                                initialRouteName="Main"
+                                screenOptions={defaultNavigationOptions}                              
+                                headerMode="none" //隐藏 Navigator 标题栏
                             >
                                 {routerConfig && routerConfig.map((item, index)=> {
                                     return(
-                                        <Stack.Screen key={item.name} name={item.name} component={item.component} />
+                                        <Stack.Screen 
+                                            key={item.name} 
+                                            name={item.name} 
+                                            component={item.component} 
+                                        />
                                     )
                                 })}
                             </Stack.Navigator>
                         </NavigationContainer>
                     </Provider> 
                 </View>
-                {/*全局加载弹窗*/}
-                {/* <LoadingPopup /> */}
             </View>          
         );
     }
