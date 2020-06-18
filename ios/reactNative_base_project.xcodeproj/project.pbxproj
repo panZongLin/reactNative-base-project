@@ -140,6 +140,7 @@
 				00E356EF1AD99517003FC87E /* reactNative_base_projectTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
+				3CB4A383CBA94931A2CD6D55 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -156,6 +157,14 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		3CB4A383CBA94931A2CD6D55 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
