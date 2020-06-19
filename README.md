@@ -1,2 +1,6 @@
 # reactNative_base_project
-react native基础架构
+```javascript
+
+ 技术栈：
+    react native + dva-core + react-dedux + axios
+```
