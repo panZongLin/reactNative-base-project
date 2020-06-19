@@ -1,7 +1,28 @@
 import React from 'react';
+import {connect} from 'react-redux';
 import { Text, View } from 'react-native';
 import MCIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+
+
+function DrawerScreen1() {
+	return (
+		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+			<Text>DrawerScreen111!</Text>
+		</View>
+	);
+}
+function DrawerScreen2() {
+	return (
+		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+			<Text>DrawerScreen222!</Text>
+		</View>
+	);
+}
+//Drawer.Navigator
+const Drawer = createDrawerNavigator();
+
 
 function HomeScreen() {
 	return (
@@ -10,15 +31,14 @@ function HomeScreen() {
 		</View>
 	);
 }
-  
 function SettingsScreen() {
 	return (
-		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Text>Settings!</Text>
-		</View>
+		<Drawer.Navigator drawerPosition="right">
+			<Drawer.Screen name="DrawerScreen1" component={DrawerScreen1} />
+			<Drawer.Screen name="DrawerScreen2" component={DrawerScreen2} />
+		</Drawer.Navigator>
 	);
 }
-
 //Tab.Navigator
 const Tab = createBottomTabNavigator();
 const defaultNavigationOptions = ({ route }) => ({
@@ -34,13 +54,15 @@ const defaultNavigationOptions = ({ route }) => ({
 	},
 })
 
+
 class Main extends React.Component {
 
 	render() {
-		const { } = this.props;
+		const {} = this.props;
+		console.log('this.props', this.props);
+		console.log('global', global); 
 		return(
 			<Tab.Navigator
-				// screenOptions={defaultNavigationOptions()} 这样不行为啥
 				screenOptions={defaultNavigationOptions}
 				tabBarOptions={{
 					activeTintColor: 'tomato',
@@ -54,4 +76,16 @@ class Main extends React.Component {
 	}
 }
 
-export default Main;
+
+function mapStateToProps(state) {
+    return {
+        main: state.main,
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatchUpdateState: (params) => dispatch({ type: 'main/updateState', payload: params}),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

@@ -6,7 +6,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
 // import {request, PERMISSIONS} from 'react-native-permissions';
-import {View, TextInput, UIManager, Platform, BackHandler} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import {View, StatusBar, TextInput, UIManager, Platform, BackHandler} from 'react-native';
 
 import routerConfig from './configs/router'; //路由配置
 import modelOption from './models/modelOption'; //数据管理
@@ -84,34 +85,37 @@ class App extends React.PureComponent {
 
     render() {
         return ( 
-            <View style={{flex: 1}}>               
-                <View 
-                    style={{
-                        position: 'absolute', left:0, top:0, right:0, 
-                        bottom: isIphoneXAndUp() ? unitHeight*23 : 0
-                    }}
-                >
-                    <Provider store={store}>                      
-                        <NavigationContainer>
-                            <Stack.Navigator                                
-                                initialRouteName="Main"
-                                screenOptions={defaultNavigationOptions}                              
-                                headerMode="none" //隐藏 Navigator 标题栏
-                            >
-                                {routerConfig && routerConfig.map((item, index)=> {
-                                    return(
-                                        <Stack.Screen 
-                                            key={item.name} 
-                                            name={item.name} 
-                                            component={item.component} 
-                                        />
-                                    )
-                                })}
-                            </Stack.Navigator>
-                        </NavigationContainer>
-                    </Provider> 
-                </View>
-            </View>          
+            <SafeAreaProvider>
+                <SafeAreaView style={{flex: 1}}>
+                    <StatusBar barStyle="dark-content" backgroundColor="#f2f2f2" />               
+                    {/* <View 
+                        style={{
+                            position: 'absolute', left:0, top:0, right:0, 
+                            bottom: isIphoneXAndUp() ? unitHeight*23 : 0
+                        }}
+                    > */}
+                        <Provider store={store}>                      
+                            <NavigationContainer>
+                                <Stack.Navigator                                
+                                    initialRouteName="Main"
+                                    screenOptions={defaultNavigationOptions}                              
+                                    headerMode="none" //隐藏 Navigator 标题栏
+                                >
+                                    {routerConfig && routerConfig.map((item, index)=> {
+                                        return(
+                                            <Stack.Screen 
+                                                key={item.name} 
+                                                name={item.name} 
+                                                component={item.component} 
+                                            />
+                                        )
+                                    })}
+                                </Stack.Navigator>
+                            </NavigationContainer>
+                        </Provider> 
+                    {/* </View> */}
+                </SafeAreaView> 
+            </SafeAreaProvider>         
         );
     }
 }
