@@ -39,7 +39,7 @@ yarn-error.log
 buck-out/
 \.buckd/
 # 秘钥库文件
-# *.keystore
+*.keystore
 !debug.keystore
 
 # fastlane
