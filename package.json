@@ -36,7 +36,8 @@
     "react-native-storage": "^1.0.1",
     "react-native-vector-icons": "^6.6.0",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "treer": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
