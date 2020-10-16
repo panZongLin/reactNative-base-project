@@ -9,25 +9,24 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 function DrawerScreen1() {
 	return (
 		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Text>DrawerScreen111!</Text>
+			<Text>DrawerScreen1!</Text>
 		</View>
 	);
 }
 function DrawerScreen2() {
 	return (
 		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Text>DrawerScreen222!</Text>
+			<Text>DrawerScreen2!</Text>
 		</View>
 	);
 }
+
 //Drawer.Navigator
 const Drawer = createDrawerNavigator();
-
-
 function HomeScreen() {
 	return (
 		<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-			<Text>Home!</Text>
+			<Text onPress={()=> {throw new Error('抛出一个错误！')}}>Home!</Text>
 		</View>
 	);
 }
@@ -39,6 +38,7 @@ function SettingsScreen() {
 		</Drawer.Navigator>
 	);
 }
+
 //Tab.Navigator
 const Tab = createBottomTabNavigator();
 const defaultNavigationOptions = ({ route }) => ({
@@ -58,9 +58,8 @@ const defaultNavigationOptions = ({ route }) => ({
 class Main extends React.Component {
 
 	render() {
-		const {} = this.props;
-		console.log('this.props', this.props);
-		console.log('global', global); 
+		const {navigation, route, main, dispatchUpdateState} = this.props;
+
 		return(
 			<Tab.Navigator
 				screenOptions={defaultNavigationOptions}
@@ -72,6 +71,7 @@ class Main extends React.Component {
 				<Tab.Screen name="Home" component={HomeScreen} />
 				<Tab.Screen name="Settings" component={SettingsScreen} />
 			</Tab.Navigator>
+			
 		)
 	}
 }

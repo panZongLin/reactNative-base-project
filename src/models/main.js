@@ -1,4 +1,3 @@
-import toolFn from '../utils/toolFunction';
 
 export default {
 	namespace: 'main',
@@ -11,10 +10,7 @@ export default {
 	},
 	reducers: {
 		'updateState'(state, {payload}) {
-			return {
-				...state,
-				...payload
-			}
+			return {...state, ...payload}
 		},
 	}
 };

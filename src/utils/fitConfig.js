@@ -12,21 +12,25 @@ export const width = Dimensions.get('window').width;
 //手机屏幕的高度
 export const height = Dimensions.get('window').height;
 
-//宽度比例
-export const unitWidth = width / designWidth
-//高度比例
-export const unitHeight = height / designHeight
-
+//字体缩放比
 const fontScale = PixelRatio.getFontScale();
+//设备像素密度
 const pixelRatio = PixelRatio.get();
+
+
+//宽度比例
+export const uw = width / designWidth
+//高度比例
+export const uh = height / designHeight
 //字体缩放比例
-export function unitSize(size) {
+export function us(size) {
     var scaleWidth = width / designWidth;
     var scaleHeight = height / designHeight;
     var scale = Math.min(scaleWidth, scaleHeight);
     size = Math.round(size*scale/fontScale + 0.5);
     return size;
 }
+
 
 
 //判断是否为iphoneX，11
@@ -38,7 +42,6 @@ export function isIphoneXAndUp() {
             || height == X11PRO_HEIGHT && width == X11PRO_WIDTH
         )
 }
-
 
 //状态栏的高度
 export function getStatusBarHeight() {

@@ -1,5 +1,8 @@
+/**
+ * 
+ * 请求统一配置
+ */
 import axios from 'axios';
-
 
 axios.defaults.timeout = 5000;
 axios.defaults.withCredentials = true; // 跨域请求，允许保存cookie

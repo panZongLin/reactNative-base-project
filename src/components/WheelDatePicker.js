@@ -4,21 +4,20 @@
  */
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
-import range from 'lodash.range';
-import {autobind} from 'core-decorators';
+import {range} from 'lodash';
 import {
-    View, Text, StyleSheet, Animated, StatusBar, 
-    Dimensions, Platform, TouchableOpacity, default as Easing, 
+    View, Text, StyleSheet, 
+    Animated, Dimensions, StatusBar,
+    Platform, TouchableOpacity, default as Easing, 
 } from 'react-native';
+import Picker from '@gregfrench/react-native-wheel-picker'
+import {uw, uh, us} from '../utils/fitConfig';
 
-import Picker from 'react-native-wheel-picker'
-var PickerItem = Picker.Item;
-
-import {unitWidth, unitHeight, unitSize, isIphoneXAndUp} from '../../misc/Adapt';
 const { width, height } = Dimensions.get('window');
+const PickerItem = Picker.Item;
 
-@autobind
-export default class WheelPickerBirthdayModal extends React.Component {
+
+export default class WheelDatePicker extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,7 +30,7 @@ export default class WheelPickerBirthdayModal extends React.Component {
             selectedYearItem : this.props.opations[2].selectedItem,
             itemYearList: this.props.opations[2].itemList,
 
-            contentBottom: new Animated.Value(unitHeight*-250) 
+            contentBottom: new Animated.Value(uh*-250) 
         }
     }
     static navigationOptions = {
@@ -61,7 +60,11 @@ export default class WheelPickerBirthdayModal extends React.Component {
         ]
     }
 
-    componentDidMount() {} 
+    componentDidMount() {
+        if(this.props.pickerModalVisible===true) {
+            this.startAnimation()
+        }
+    } 
 
     UNSAFE_componentWillReceiveProps(nextProps) {
         if(nextProps.pickerModalVisible===true && this.props.pickerModalVisible ==false) {
@@ -89,18 +92,16 @@ export default class WheelPickerBirthdayModal extends React.Component {
     }
 
     startAnimation ()  {
-        //this.state.contentBottom.setValue(unitHeight*-250);
         Animated.sequence([
             Animated.timing(
                 this.state.contentBottom,
                 {
-                    toValue: unitHeight*0,
+                    toValue: uh*0,
                     duration: 500,
                     easing: Easing.linear
                 }
             )
         ]).start() 
-
     };
 
 
@@ -108,21 +109,21 @@ export default class WheelPickerBirthdayModal extends React.Component {
         const styles = StyleSheet.create({  
             content: {
                 width: '100%',
-                height: unitHeight*250,
+                height: uh*250,
                 position: 'absolute',
                 left: 0,             
                 backgroundColor: '#fff',
-                borderTopLeftRadius: unitHeight*5,
-                borderTopRightRadius: unitHeight*5,               
+                borderTopLeftRadius: uh*10,
+                borderTopRightRadius: uh*10,               
             },
             leftV: {
                 width: width/2,
-                height: unitHeight*50,
+                height: uh*50,
                 justifyContent: 'center',
                 alignItems: 'center',
-                borderTopWidth: unitHeight*1,
+                borderTopWidth: uh*1,
                 borderTopColor: '#ccc',
-                borderRightWidth: unitHeight*1,
+                borderRightWidth: uh*1,
                 borderRightColor: '#ccc'
             }
         })
@@ -133,38 +134,44 @@ export default class WheelPickerBirthdayModal extends React.Component {
                     <View style={{...StyleSheet.absoluteFill, backgroundColor: 'rgba(0,0,0,0.5)'}}>
                         <Animated.View style={[styles.content, {bottom: this.state.contentBottom}]}>
                             <View style={{flexDirection: 'row', justifyContent: 'space-around', alignContent: 'center'}}>
-                                <Picker style={{width: '45%', height: unitHeight*200}}
+                                <Picker 
+                                    style={{width: '45%', height: uh*200}}
                                     selectedValue={this.state.selectedMonthItem}
-                                    itemStyle={{color:"#3a3a3a", fontSize: Platform.OS==='ios' ? unitSize(24) : unitSize(18)}}
+                                    itemStyle={{color:"#3a3a3a", fontSize: Platform.OS==='ios' ? us(24) : us(18)}}
                                     onValueChange={(index) => this.onPickerSelect(index, 'month')}
                                 >
-                                        {this.state.itemMonthList.map((value, i) => (
-                                            <PickerItem label={value} value={i} key={"month"+value}/>
-                                        ))}
+                                    {this.state.itemMonthList.map((value, i) => (
+                                        <PickerItem label={value} value={i} key={"month"+value}/>
+                                    ))}
                                 </Picker>
-                                <Picker style={{width: '25%', height: unitHeight*200}}
+                                <Picker 
+                                    style={{width: '25%', height: uh*200}}
                                     selectedValue={this.state.selectedDayItem}
-                                    itemStyle={{color:"#3a3a3a", fontSize: unitSize(24)}}
+                                    itemStyle={{color:"#3a3a3a", fontSize: us(24)}}
                                     onValueChange={(index) => this.onPickerSelect(index, 'day')}
                                 >
-                                        {this.state.itemDayList.map((value, i) => (
-                                            <PickerItem label={value} value={i} key={"day"+value}/>
-                                        ))}
+                                    {this.state.itemDayList.map((value, i) => (
+                                        <PickerItem label={value} value={i} key={"day"+value}/>
+                                    ))}
                                 </Picker>
-                                <Picker style={{width: '30%', height: unitHeight*200}}
+                                <Picker 
+                                    style={{width: '30%', height: uh*200}}
                                     selectedValue={this.state.selectedYearItem}
-                                    itemStyle={{color:"#3a3a3a", fontSize: unitSize(24)}}
+                                    itemStyle={{color:"#3a3a3a", fontSize: us(24)}}
                                     onValueChange={(index) => this.onPickerSelect(index, 'year')}
                                 >
-                                        {this.state.itemYearList.map((value, i) => (
-                                            <PickerItem label={value} value={i} key={"year"+value}/>
-                                        ))}
+                                    {this.state.itemYearList.map((value, i) => (
+                                        <PickerItem label={value} value={i} key={"year"+value}/>
+                                    ))}
                                 </Picker>
                             </View>                         
-                            <View style={{flexDirection: 'row', width: '100%', height: unitHeight*50}}>
-                                <TouchableOpacity activeOpacity={1} onPress={()=>this.props.togglePickerModal(false)}>
+                            <View style={{flexDirection: 'row', width: '100%', height: uh*50}}>
+                                <TouchableOpacity 
+                                    activeOpacity={1} 
+                                    onPress={()=>this.props.togglePickerModal(false)}
+                                >
                                     <View style={styles.leftV}>
-                                        <Text style={{color: '#999', fontSize: unitSize(16)}}>Cancel</Text>
+                                        <Text style={{color: '#999', fontSize: us(16)}}>Cancel</Text>
                                     </View>
                                 </TouchableOpacity>  
                                 <TouchableOpacity 
@@ -172,7 +179,7 @@ export default class WheelPickerBirthdayModal extends React.Component {
                                     onPress={this.handerConfirmPicker}
                                 >
                                     <View style={{...styles.leftV, borderRightWidth: 0}}>
-                                        <Text style={{color: '#60BD6E', fontSize: unitSize(16)}}>Confirm</Text>
+                                        <Text style={{color: '#60BD6E', fontSize: us(16)}}>Confirm</Text>
                                     </View>
                                 </TouchableOpacity>                       
                             </View>
@@ -191,4 +198,4 @@ const propTypes = {
     confirmPicker: PropTypes.func,
     opations: PropTypes.array
 };
-WheelPickerBirthdayModal.propTypes = propTypes;
+WheelDatePicker.propTypes = propTypes;

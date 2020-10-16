@@ -1,31 +1,30 @@
-import 'react-native-gesture-handler';
+import 'react-native-gesture-handler'; //更好的手势响应
 import React from 'react';
 import { create } from 'dva-core';
 import { Provider } from 'react-redux';
+import {View, StatusBar, TextInput, UIManager, Platform} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from 'react-native-splash-screen';
-// import {request, PERMISSIONS} from 'react-native-permissions';
+import {request, requestMultiple, check, checkMultiple, PERMISSIONS} from 'react-native-permissions';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import {View, StatusBar, TextInput, UIManager, Platform, BackHandler} from 'react-native';
 
 import routerConfig from './configs/router'; //路由配置
 import modelOption from './models/modelOption'; //数据管理
 
-
 import './utils/storage'; //本地储存
 import toolFn from './utils/toolFunction';  //工具函数
-import {unitWidth, unitHeight, unitSize, isIphoneXAndUp} from './utils/fitConfig'; //适配文件
-import registerUncaughtExceptionHandlers from './utils/uncaught-exception-handle';  //崩溃提示
+import {uw, uh, us, isIphoneXAndUp} from './utils/fitConfig'; //适配文件
+import registerUncaughtExceptionHandlers from './utils/uncaught-exception-handle';  //逻辑崩溃提示
 
 
-//dva实例初始化
+//DVA实例初始化并导出
 const dvaApp = create(); 
 modelOption.forEach((obj) => {  
     dvaApp.model(obj);
 });
 dvaApp.start();      
-global.store = dvaApp._store; 
+export const dvaAppStore = dvaApp._store;
 
 
 //Stack.Navigator  
@@ -36,7 +35,7 @@ const defaultNavigationOptions = {
     },
     headerTintColor: '#000',
     headerTitleStyle: {
-        fontSize: unitSize(14),
+        fontSize: us(14),
         textAlign: 'center'
     },
 }
@@ -53,30 +52,44 @@ class App extends React.PureComponent {
         this.requestMultiple();
     }
 
-    //请求权限，模块未安装
+    //请求权限(ios未配置)
     async requestMultiple() {
         if(Platform.OS === 'android') { 
-            //await request(PERMISSIONS.ANDROID.CAMERA);       
+            await requestMultiple([
+                PERMISSIONS.ANDROID.CAMERA, 
+                PERMISSIONS.ANDROID.CALL_PHONE
+            ]);  
+            checkMultiple([
+                PERMISSIONS.ANDROID.CAMERA, 
+                PERMISSIONS.ANDROID.CALL_PHONE
+            ])
+                .then((result) => {
+                    //console.log('PERMISSIONS result', result)
+                })
+                .catch((error) => {
+                    //console.log('PERMISSIONS error', error)
+                });     
         }else {
-            
+            //...
         }
     }
 
     componentDidMount() {
-        //关闭启动页，放在你认为合适的地方
+        //关闭启动页(ios未配置)
         setTimeout(()=>{
             SplashScreen.hide();
         }, 1000)
     }
 
-    prepareApp() {
-        // 
+    //一些起始配置
+    prepareApp() { 
         registerUncaughtExceptionHandlers();        
 
         // Set some default props to commonly used UI components.
         TextInput.defaultProps.padding = 0;
 
-        // https://facebook.github.io/react-native/docs/layoutanimation
+        // https://reactnative.cn/docs/animations#layoutanimation-api
+        // 在Android上使用 LayoutAnimation，那么目前还需要在UIManager中启用
         if (toolFn.isAndroid()) {
             UIManager.setLayoutAnimationEnabledExperimental(true);
         }
@@ -88,32 +101,25 @@ class App extends React.PureComponent {
             <SafeAreaProvider>
                 <SafeAreaView style={{flex: 1}}>
                     <StatusBar barStyle="dark-content" backgroundColor="#f2f2f2" />               
-                    {/* <View 
-                        style={{
-                            position: 'absolute', left:0, top:0, right:0, 
-                            bottom: isIphoneXAndUp() ? unitHeight*23 : 0
-                        }}
-                    > */}
-                        <Provider store={store}>                      
-                            <NavigationContainer>
-                                <Stack.Navigator                                
-                                    initialRouteName="Main"
-                                    screenOptions={defaultNavigationOptions}                              
-                                    headerMode="none" //隐藏 Navigator 标题栏
-                                >
-                                    {routerConfig && routerConfig.map((item, index)=> {
-                                        return(
-                                            <Stack.Screen 
-                                                key={item.name} 
-                                                name={item.name} 
-                                                component={item.component} 
-                                            />
-                                        )
-                                    })}
-                                </Stack.Navigator>
-                            </NavigationContainer>
-                        </Provider> 
-                    {/* </View> */}
+                    <Provider store={dvaApp._store}>                      
+                        <NavigationContainer>
+                            <Stack.Navigator                                
+                                initialRouteName="Main"
+                                screenOptions={defaultNavigationOptions}                              
+                                headerMode="none" //隐藏 Navigator自带标题栏
+                            >
+                                {routerConfig && routerConfig.map((item, index)=> {
+                                    return(
+                                        <Stack.Screen 
+                                            key={item.name} 
+                                            name={item.name} 
+                                            component={item.component} 
+                                        />
+                                    )
+                                })}
+                            </Stack.Navigator>
+                        </NavigationContainer>
+                    </Provider> 
                 </SafeAreaView> 
             </SafeAreaProvider>         
         );

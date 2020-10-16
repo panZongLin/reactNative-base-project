@@ -7,7 +7,7 @@ import Echarts from 'native-echarts';
 
 
 
-class EchartsComponent extends Component {
+class EchartsShouldUpdate extends Component {
     //起这个组件的主要目的，是控制其何时才去刷新, 当x轴刻度和数据源都不变的情况下不刷新
     shouldComponentUpdate(nextProps, nextState) {
         if (
@@ -31,4 +31,4 @@ class EchartsComponent extends Component {
     }
 }
 
-export default EchartsComponent
+export default EchartsShouldUpdate
